@@ -5,8 +5,17 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: 'node',
+    environment: 'jsdom',
     globals: true,
+    // Run test files sequentially to avoid database conflicts
+    fileParallelism: false,
+    // Also run tests within each file sequentially
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
   },
   resolve: {
     alias: {

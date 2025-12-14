@@ -56,7 +56,7 @@ describe('POST /api/auth/logout', () => {
     expect(dbSession).toBeNull();
   });
 
-  it('should return error when no session token provided', async () => {
+  it('should return success when no session token provided', async () => {
     // Create request without session cookie
     const request = new NextRequest('http://localhost:3000/api/auth/logout', {
       method: 'POST',
@@ -66,10 +66,13 @@ describe('POST /api/auth/logout', () => {
     const response = await POST(request);
     const data = await response.json();
 
-    // Verify response
-    expect(response.status).toBe(401);
-    expect(data.success).toBe(false);
-    expect(data.error).toBe('No active session');
+    // Verify response - should succeed even without session
+    expect(response.status).toBe(200);
+    expect(data.success).toBe(true);
+    
+    // Verify session cookie is cleared
+    const sessionCookie = response.cookies.get('session_token');
+    expect(sessionCookie?.value).toBe('');
   });
 
   it('should handle already logged out session gracefully', async () => {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logout } from '@/lib/auth';
+import { handleApiError } from '@/lib/errors';
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,10 +8,13 @@ export async function POST(request: NextRequest) {
     const sessionToken = request.cookies.get('session_token')?.value;
 
     if (!sessionToken) {
-      return NextResponse.json(
-        { success: false, error: 'No active session' },
-        { status: 401 }
+      // Even if no session, clear cookie and return success
+      const response = NextResponse.json(
+        { success: true },
+        { status: 200 }
       );
+      response.cookies.delete('session_token');
+      return response;
     }
 
     // Destroy session in database
@@ -37,11 +41,6 @@ export async function POST(request: NextRequest) {
       return response;
     }
 
-    // Handle other errors
-    console.error('Logout error:', error);
-    return NextResponse.json(
-      { success: false, error: 'An error occurred during logout' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

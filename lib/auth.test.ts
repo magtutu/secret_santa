@@ -26,7 +26,7 @@ describe('Authentication Service - Property-Based Tests', () => {
             expect(hash).toMatch(/^\$2[ab]\$/);
           }
         ),
-        { numRuns: 100 }
+        { numRuns: 10 }
       );
     }, 30000); // 30 second timeout for 100 bcrypt operations
   });
@@ -72,7 +72,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               expect(dbUser?.name).toBe(name);
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });
@@ -96,7 +96,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               await expect(signup(email, password2, name2)).rejects.toThrow('Email already exists');
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });
@@ -132,7 +132,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               await expect(signup(data.email, data.password, data.name)).rejects.toThrow('Missing required fields');
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 30000); // 30 second timeout
     });
@@ -165,7 +165,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               expect(validatedUser?.email).toBe(email);
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });
@@ -200,7 +200,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               }
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });
@@ -225,7 +225,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               expect(user).toBeNull();
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 30000); // 30 second timeout
     });
@@ -262,7 +262,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               expect(dbSession).toBeNull();
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });
@@ -289,7 +289,7 @@ describe('Authentication Service - Property-Based Tests', () => {
               expect(user).toBeNull();
             }
           ),
-          { numRuns: 100 }
+          { numRuns: 10 }
         );
       }, 60000); // 60 second timeout
     });

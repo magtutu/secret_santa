@@ -105,31 +105,31 @@
   - **Property 9: Post-logout authorization failure**
   - **Validates: Requirements 7.4**
 
-- [ ] 8. Create authentication middleware
+- [x] 8. Create authentication middleware
   - Create middleware to validate session tokens
   - Implement redirect logic for unauthenticated users
   - Protect dashboard and exchange pages
   - _Requirements: 2.5, 7.4_
 
-- [ ] 9. Implement exchange service
+- [x] 9. Implement exchange service
   - Create exchange service module with createExchange, getExchange, getUserExchanges, joinExchange, and getParticipants functions
   - Implement unique exchange code generation (6-8 alphanumeric characters)
   - Implement logic to add organizer as first participant
   - _Requirements: 3.1, 3.2, 3.3, 4.2_
 
-- [ ] 9.1 Write property test for valid exchange creation
+- [x] 9.1 Write property test for valid exchange creation
   - **Property 10: Valid exchange creation**
   - **Validates: Requirements 3.1, 3.2, 3.3, 3.5**
 
-- [ ] 9.2 Write property test for exchange code uniqueness
+- [x] 9.2 Write property test for exchange code uniqueness
   - **Property 11: Exchange code uniqueness**
   - **Validates: Requirements 3.2**
 
-- [ ] 9.3 Write property test for missing exchange fields
+- [x] 9.3 Write property test for missing exchange fields
   - **Property 12: Missing exchange fields rejection**
   - **Validates: Requirements 3.4**
 
-- [ ] 10. Implement create exchange API route and page
+- [x] 10. Implement create exchange API route and page
   - Create POST /api/exchange/create route with server-side validation
   - Handle exchange creation with organizer as first participant
   - Process optional invitee_emails array
@@ -138,38 +138,38 @@
   - Include optional email invitation field
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 10.1 Write unit tests for invitation email logging
+- [x] 10.1 Write unit tests for invitation email logging
   - Test console output format
   - Test signup link generation with exchange code
   - _Requirements: 3.5_
 
-- [ ] 11. Implement join exchange API route
+- [x] 11. Implement join exchange API route
   - Create POST /api/exchange/join route
   - Validate exchange code exists
   - Prevent duplicate participation
   - Add user as participant
   - _Requirements: 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 11.1 Write property test for valid code joins
+- [x] 11.1 Write property test for valid code joins
   - **Property 13: Valid code joins exchange**
   - **Validates: Requirements 4.2, 4.4**
 
-- [ ] 11.2 Write property test for duplicate join prevention
+- [x] 11.2 Write property test for duplicate join prevention
   - **Property 14: Duplicate join prevention**
   - **Validates: Requirements 4.3**
 
-- [ ] 11.3 Write property test for invalid code rejection
+- [x] 11.3 Write property test for invalid code rejection
   - **Property 15: Invalid code rejection**
   - **Validates: Requirements 4.5**
 
-- [ ] 12. Implement dashboard page
+- [x] 12. Implement dashboard page
   - Create dashboard page that fetches and displays all exchanges for logged-in user
   - Show exchange name, date, participant count, and role (organizer/participant)
   - Add navigation to create new exchange
   - Add links to individual exchange pages
   - _Requirements: 2.3, 3.5_
 
-- [ ] 13. Implement assignment service
+- [x] 13. Implement assignment service
   - Create assignment service module with createAssignmentCycle function
   - Implement randomized cycle algorithm (shuffle participants, create chain, close loop)
   - Ensure no self-assignments
@@ -177,11 +177,11 @@
   - Keep algorithm pure (no database operations)
   - _Requirements: 5.1, 5.2, 5.3_
 
-- [ ] 13.1 Write property test for assignment structure
+- [x] 13.1 Write property test for assignment structure
   - **Property 17: Valid assignment structure**
   - **Validates: Requirements 5.1, 5.2, 5.3, 5.5**
 
-- [ ] 14. Implement generate assignments API route
+- [x] 14. Implement generate assignments API route
   - Create POST /api/exchange/[id]/assign route
   - Verify organizer permission
   - Check minimum participant count (3+)
@@ -189,13 +189,13 @@
   - Store assignments in database
   - _Requirements: 5.1, 5.4, 5.5_
 
-- [ ] 14.1 Write unit tests for assignment generation
+- [x] 14.1 Write unit tests for assignment generation
   - Test organizer permission check
   - Test minimum participant validation
   - Test assignment storage
   - _Requirements: 5.4, 5.5_
 
-- [ ] 15. Implement exchange detail page
+- [x] 15. Implement exchange detail page
   - Create exchange/[id]/page.tsx to display exchange details
   - Show exchange name, description, budget, date, and code
   - List all participants
@@ -204,11 +204,11 @@
   - Handle assignment generation trigger
   - _Requirements: 4.1, 5.1, 6.2_
 
-- [ ] 15.1 Write property test for exchange code visibility
+- [x] 15.1 Write property test for exchange code visibility
   - **Property 16: Exchange code visibility**
   - **Validates: Requirements 4.1**
 
-- [ ] 16. Implement assignment viewing
+- [x] 16. Implement assignment viewing
   - Create GET /api/assignment/[exchangeId] route
   - Verify user is participant in exchange
   - Return only the user's receiver information
@@ -216,15 +216,15 @@
   - Add assignment display to exchange detail page
   - _Requirements: 6.1, 6.3, 6.4_
 
-- [ ] 16.1 Write property test for assignment information hiding
+- [x] 16.1 Write property test for assignment information hiding
   - **Property 18: Assignment information hiding**
   - **Validates: Requirements 6.1**
 
-- [ ] 16.2 Write property test for assignment authorization
+- [x] 16.2 Write property test for assignment authorization
   - **Property 19: Assignment authorization**
   - **Validates: Requirements 6.3, 6.4**
 
-- [ ] 17. Implement UI components with Tailwind CSS
+- [x] 17. Implement UI components with Tailwind CSS
   - Create reusable Button component with Tailwind classes
   - Create reusable Input component with Tailwind classes and required field indicators
   - Create reusable Card component with Tailwind classes
@@ -232,15 +232,15 @@
   - Ensure responsive design with Tailwind breakpoints
   - _Requirements: 8.1, 8.4, 8.5, 8.6_
 
-- [ ] 17.1 Write property test for required field indicators
+- [x] 17.1 Write property test for required field indicators
   - **Property 20: Required field indicators**
   - **Validates: Requirements 8.4**
 
-- [ ] 17.2 Write property test for Tailwind CSS usage
+- [x] 17.2 Write property test for Tailwind CSS usage
   - **Property 21: Tailwind CSS usage**
   - **Validates: Requirements 8.6**
 
-- [ ] 18. Add error handling and user feedback
+- [x] 18. Add error handling and user feedback
   - Implement consistent error response format for all API routes
   - Add error boundary components for React errors
   - Add toast/notification system for user feedback
@@ -248,13 +248,13 @@
   - Handle loading states during API calls
   - _Requirements: 8.2, 8.3_
 
-- [ ] 19. Implement home/landing page
+- [x] 19. Implement home/landing page
   - Create root page.tsx with welcome message
   - Add links to login and signup
   - Style with Tailwind CSS
   - _Requirements: 8.1, 8.6_
 
-- [ ] 20. Final checkpoint - Ensure all tests pass
+- [x] 20. Final checkpoint - Ensure all tests pass
   - Run all unit tests and property-based tests
   - Verify all features work end-to-end
   - Check database operations

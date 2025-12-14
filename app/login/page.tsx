@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { validateLoginForm } from '@/lib/validation';
+import { FormError } from '@/components/FormError';
+import { useToast } from '@/components/Toast';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -50,13 +53,16 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
+        showToast('Logged in successfully!', 'success');
         // Redirect to dashboard
         router.push('/dashboard');
       } else {
         setErrors([data.error || 'Login failed']);
       }
     } catch (error) {
-      setErrors(['An error occurred. Please try again.']);
+      const errorMessage = 'An error occurred. Please try again.';
+      setErrors([errorMessage]);
+      showToast(errorMessage, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -72,24 +78,7 @@ export default function LoginPage() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {errors.length > 0 && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="flex">
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">
-                    {errors.length === 1 ? 'Error' : 'Errors'}
-                  </h3>
-                  <div className="mt-2 text-sm text-red-700">
-                    <ul className="list-disc space-y-1 pl-5">
-                      {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          <FormError errors={errors} />
 
           <div className="space-y-4 rounded-md shadow-sm">
             <div>

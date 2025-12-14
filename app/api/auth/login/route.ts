@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { login } from '@/lib/auth';
 import { validateLoginForm } from '@/lib/validation';
+import { createErrorResponse, handleApiError, ErrorCodes } from '@/lib/errors';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,9 +11,11 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validation = validateLoginForm({ email, password });
     if (!validation.isValid) {
-      return NextResponse.json(
-        { success: false, error: validation.errors.join(', ') },
-        { status: 400 }
+      return createErrorResponse(
+        validation.errors.join(', '),
+        400,
+        validation.errors,
+        ErrorCodes.VALIDATION_ERROR
       );
     }
 
@@ -45,19 +48,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error: any) {
-    // Handle invalid credentials
-    if (error.message === 'Invalid credentials') {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email or password' },
-        { status: 401 }
-      );
-    }
-
-    // Handle other errors
-    console.error('Login error:', error);
-    return NextResponse.json(
-      { success: false, error: 'An error occurred during login' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

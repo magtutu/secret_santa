@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { signup, login } from '@/lib/auth';
 import { validateSignupForm } from '@/lib/validation';
 import { prisma } from '@/lib/db';
+import { createErrorResponse, handleApiError, ErrorCodes } from '@/lib/errors';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,9 +12,11 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validation = validateSignupForm({ email, password, name });
     if (!validation.isValid) {
-      return NextResponse.json(
-        { success: false, error: validation.errors.join(', ') },
-        { status: 400 }
+      return createErrorResponse(
+        validation.errors.join(', '),
+        400,
+        validation.errors,
+        ErrorCodes.VALIDATION_ERROR
       );
     }
 
@@ -78,19 +81,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error: any) {
-    // Handle duplicate email error
-    if (error.message === 'Email already exists') {
-      return NextResponse.json(
-        { success: false, error: 'Email already exists' },
-        { status: 409 }
-      );
-    }
-
-    // Handle other errors
-    console.error('Signup error:', error);
-    return NextResponse.json(
-      { success: false, error: 'An error occurred during signup' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
