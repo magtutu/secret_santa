@@ -5,7 +5,7 @@ import { handleApiError, requireAuth } from '@/lib/errors';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify user is authenticated
@@ -18,7 +18,7 @@ export async function POST(
     
     const user = authResult.user;
 
-    const exchangeId = params.id;
+    const { id: exchangeId } = await params;
 
     // Generate assignments
     const assignments = await generateAssignments(exchangeId, user.id);

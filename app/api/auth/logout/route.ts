@@ -1,46 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logout } from '@/lib/auth';
-import { handleApiError } from '@/lib/errors';
 
 export async function POST(request: NextRequest) {
   try {
     // Get session token from cookie
     const sessionToken = request.cookies.get('session_token')?.value;
 
-    if (!sessionToken) {
-      // Even if no session, clear cookie and return success
-      const response = NextResponse.json(
-        { success: true },
-        { status: 200 }
-      );
-      response.cookies.delete('session_token');
-      return response;
+    if (sessionToken) {
+      // Destroy session in database
+      try {
+        await logout(sessionToken);
+      } catch (error: any) {
+        // Ignore errors if session doesn't exist (already logged out)
+        if (error.code !== 'P2025') {
+          throw error;
+        }
+      }
     }
 
-    // Destroy session in database
-    await logout(sessionToken);
-
-    // Create response
-    const response = NextResponse.json(
-      { success: true },
-      { status: 200 }
-    );
+    // Create redirect response to login page
+    const response = NextResponse.redirect(new URL('/login', request.url));
 
     // Clear session cookie
     response.cookies.delete('session_token');
 
     return response;
   } catch (error: any) {
-    // Handle case where session doesn't exist (already logged out)
-    if (error.code === 'P2025') {
-      const response = NextResponse.json(
-        { success: true },
-        { status: 200 }
-      );
-      response.cookies.delete('session_token');
-      return response;
-    }
-
-    return handleApiError(error);
+    // On error, still redirect to login and clear cookie
+    const response = NextResponse.redirect(new URL('/login', request.url));
+    response.cookies.delete('session_token');
+    return response;
   }
 }

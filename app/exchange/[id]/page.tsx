@@ -151,7 +151,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4">
-            {isOrganizer && !exchange.assignments_generated && (
+            {isOrganizer && !exchange.assignments_generated && participants.length >= 3 && (
               <GenerateAssignmentsButton exchangeId={id} />
             )}
 
@@ -175,6 +175,21 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4">
                   <p className="text-yellow-800">
                     Assignments have been generated, but you don't have an assignment yet.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {!exchange.assignments_generated && isOrganizer && participants.length < 3 && (
+              <div className="w-full">
+                <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4">
+                  <p className="text-yellow-800 font-semibold">
+                    Cannot generate assignments yet
+                  </p>
+                  <p className="text-yellow-700 text-sm mt-1">
+                    You need at least 3 participants to generate assignments. 
+                    Currently you have {participants.length} participant{participants.length !== 1 ? 's' : ''}.
+                    Share the exchange code with more people to join!
                   </p>
                 </div>
               </div>
@@ -216,15 +231,6 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
               </div>
             ))}
           </div>
-
-          {isOrganizer && participants.length < 3 && !exchange.assignments_generated && (
-            <div className="mt-4 rounded-lg bg-yellow-50 border border-yellow-200 p-4">
-              <p className="text-sm text-yellow-800">
-                You need at least 3 participants to generate assignments. 
-                Share the exchange code with more people to join!
-              </p>
-            </div>
-          )}
         </div>
       </main>
     </div>
