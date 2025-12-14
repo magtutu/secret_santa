@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  password_hash String
+  name          String
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  
+  sessions      Session[]
+  organized_exchanges Exchange[] @relation("Organizer")
+  participants  Participant[]
+  given_assignments Assignment[] @relation("Giver")
+  received_assignments Assignment[] @relation("Receiver")
+
+  @@index([email])
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  expires_at DateTime
+  created_at DateTime @default(now())
+  
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([user_id])
+}
+
+model Exchange {
+  id                    String        @id @default(uuid())
+  name                  String
+  description           String?
+  gift_budget           Float?
+  exchange_date         DateTime
+  code                  String        @unique
+  organizer_id          String
+  assignments_generated Boolean       @default(false)
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @updatedAt
+  
+  organizer             User          @relation("Organizer", fields: [organizer_id], references: [id], onDelete: Cascade)
+  participants          Participant[]
+  assignments           Assignment[]
+
+  @@index([code])
+  @@index([organizer_id])
+}
+
+model Participant {
+  id          String   @id @default(uuid())
+  exchange_id String
+  user_id     String
+  joined_at   DateTime @default(now())
+  
+  exchange    Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([exchange_id, user_id])
+  @@index([exchange_id])
+  @@index([user_id])
+}
+
+model Assignment {
+  id          String   @id @default(uuid())
+  exchange_id String
+  giver_id    String
+  receiver_id String
+  created_at  DateTime @default(now())
+  
+  exchange    Exchange @relation(fields: [exchange_id], references: [id], onDelete: Cascade)
+  giver       User     @relation("Giver", fields: [giver_id], references: [id], onDelete: Cascade)
+  receiver    User     @relation("Receiver", fields: [receiver_id], references: [id], onDelete: Cascade)
+
+  @@unique([exchange_id, giver_id])
+  @@index([exchange_id])
+  @@index([giver_id])
+}

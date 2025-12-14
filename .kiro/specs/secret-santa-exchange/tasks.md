@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [-] 1. Initialize Next.js project with dependencies
+- [x] 1. Initialize Next.js project with dependencies
   - Create Next.js 14+ project with App Router
   - Install and configure Tailwind CSS
   - Install database dependencies (Prisma or pg)
@@ -10,62 +10,62 @@
   - Set up TypeScript configuration
   - _Requirements: 10.1, 8.6_
 
-- [ ] 2. Set up database schema and connection
+- [x] 2. Set up database schema and connection
   - Create Prisma schema or SQL migration files for User, Session, Exchange, Participant, and Assignment tables
   - Configure database connection with environment variables (localhost, postgres/password)
   - Create database client/connection module
   - Add database indexes for email, exchange code, and session token
   - _Requirements: 9.2_
 
-- [ ] 2.1 Write unit tests for database connection
+- [x] 2.1 Write unit tests for database connection
   - Test successful connection with correct credentials
   - Test connection error handling
   - _Requirements: 9.2_
 
-- [ ] 3. Implement authentication service and password hashing
+- [x] 3. Implement authentication service and password hashing
   - Create auth service module with signup, login, logout, and validateSession functions
   - Implement bcrypt password hashing (minimum 10 rounds)
   - Implement secure session token generation
   - Create session management utilities
   - _Requirements: 1.1, 1.3, 2.1, 7.1_
 
-- [ ] 3.1 Write property test for password hashing
+- [x] 3.1 Write property test for password hashing
   - **Property 3: Password hashing**
   - **Validates: Requirements 1.3**
 
-- [ ] 3.2 Write property test for valid registration
+- [x] 3.2 Write property test for valid registration
   - **Property 1: Valid registration creates user**
   - **Validates: Requirements 1.1**
 
-- [ ] 3.3 Write property test for duplicate email rejection
+- [x] 3.3 Write property test for duplicate email rejection
   - **Property 2: Duplicate email rejection**
   - **Validates: Requirements 1.2**
 
-- [ ] 3.4 Write property test for missing fields rejection
+- [x] 3.4 Write property test for missing fields rejection
   - **Property 4: Missing required fields rejection**
   - **Validates: Requirements 1.4**
 
-- [ ] 3.5 Write property test for session creation
+- [x] 3.5 Write property test for session creation
   - **Property 5: Successful authentication creates session**
   - **Validates: Requirements 1.5, 2.1, 2.4**
 
-- [ ] 3.6 Write property test for invalid credentials
+- [x] 3.6 Write property test for invalid credentials
   - **Property 6: Invalid credentials rejection**
   - **Validates: Requirements 2.2**
 
-- [ ] 4. Create validation utilities
+- [x] 4. Create validation utilities
   - Create shared validation functions for email format, password strength, required fields
   - Create validation schemas for signup and exchange creation forms
   - Ensure validation can be used on both client and server
   - _Requirements: 1.4, 3.4_
 
-- [ ] 4.1 Write unit tests for validation utilities
+- [x] 4.1 Write unit tests for validation utilities
   - Test email validation with valid and invalid formats
   - Test required field validation
   - Test password strength requirements
   - _Requirements: 1.4, 3.4_
 
-- [ ] 5. Implement signup API route and page
+- [x] 5. Implement signup API route and page
   - Create POST /api/auth/signup route with server-side validation
   - Implement user creation with password hashing
   - Create session after successful signup
@@ -74,34 +74,34 @@
   - Handle query parameter for exchange code (auto-join after signup)
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 5.1 Write unit tests for signup API route
+- [x] 5.1 Write unit tests for signup API route
   - Test successful signup flow
   - Test duplicate email handling
   - Test validation error responses
   - _Requirements: 1.1, 1.2, 1.4_
 
-- [ ] 6. Implement login API route and page
+- [x] 6. Implement login API route and page
   - Create POST /api/auth/login route with credential validation
   - Verify password against hash
   - Create session on successful login
   - Create login page with form and client-side validation
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 6.1 Write property test for protected page authorization
+- [x] 6.1 Write property test for protected page authorization
   - **Property 7: Protected page authorization**
   - **Validates: Requirements 2.5**
 
-- [ ] 7. Implement logout API route
+- [x] 7. Implement logout API route
   - Create POST /api/auth/logout route
   - Destroy session and remove from database
   - Clear session cookie
   - _Requirements: 7.1, 7.2, 7.3_
 
-- [ ] 7.1 Write property test for session destruction
+- [x] 7.1 Write property test for session destruction
   - **Property 8: Session destruction on logout**
   - **Validates: Requirements 7.1, 7.2**
 
-- [ ] 7.2 Write property test for post-logout authorization
+- [x] 7.2 Write property test for post-logout authorization
   - **Property 9: Post-logout authorization failure**
   - **Validates: Requirements 7.4**
 
