@@ -58,6 +58,56 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
     });
   }
 
+  // Fetch all assignments if organizer, ordered by when giver joined
+  let allAssignments = null;
+  if (isOrganizer && exchange.assignments_generated) {
+    // First get all participants with their join times
+    const participantsWithJoinTime = await prisma.participant.findMany({
+      where: {
+        exchange_id: id,
+      },
+      select: {
+        user_id: true,
+        joined_at: true,
+      },
+    });
+
+    // Create a map of user_id to joined_at
+    const joinTimeMap = new Map(
+      participantsWithJoinTime.map(p => [p.user_id, p.joined_at])
+    );
+
+    // Fetch all assignments
+    const assignments = await prisma.assignment.findMany({
+      where: {
+        exchange_id: id,
+      },
+      include: {
+        giver: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        receiver: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    // Sort by when the giver joined
+    allAssignments = assignments.sort((a, b) => {
+      const aJoinTime = joinTimeMap.get(a.giver_id)?.getTime() || 0;
+      const bJoinTime = joinTimeMap.get(b.giver_id)?.getTime() || 0;
+      return aJoinTime - bJoinTime;
+    });
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
@@ -208,7 +258,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
         </div>
 
         {/* Participants List */}
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="rounded-lg bg-white p-6 shadow mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Participants ({participants.length})
           </h2>
@@ -232,6 +282,48 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
             ))}
           </div>
         </div>
+
+        {/* All Assignments (Organizer Only) */}
+        {isOrganizer && allAssignments && allAssignments.length > 0 && (
+          <div className="rounded-lg bg-white p-6 shadow">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">
+                All Assignments
+              </h2>
+              <span className="inline-flex rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-800">
+                Organizer View Only
+              </span>
+            </div>
+            
+            <div className="rounded-lg bg-purple-50 border border-purple-200 p-3 mb-4">
+              <p className="text-sm text-purple-800">
+                <strong>Note:</strong> This view is only visible to you as the organizer. 
+                Participants can only see their own assignment.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {allAssignments.map((assignment) => (
+                <div
+                  key={assignment.id}
+                  className="flex items-center justify-between border-b border-gray-200 pb-3 last:border-b-0"
+                >
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <p className="font-medium text-gray-900">{assignment.giver.name}</p>
+                      <p className="text-sm text-gray-600">{assignment.giver.email}</p>
+                    </div>
+                    <span className="text-gray-400">→</span>
+                    <div>
+                      <p className="font-medium text-gray-900">{assignment.receiver.name}</p>
+                      <p className="text-sm text-gray-600">{assignment.receiver.email}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

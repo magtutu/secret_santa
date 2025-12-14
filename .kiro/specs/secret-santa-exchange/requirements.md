@@ -77,6 +77,8 @@ The Secret Santa Exchange system is a web application that enables groups of peo
 3. WHEN generating Assignments, THEN the System SHALL ensure all Participants form a complete cycle
 4. WHEN an Organizer attempts to generate Assignments for an Exchange with fewer than 3 Participants, THEN the System SHALL reject the request and display an error message
 5. WHEN Assignments are generated, THEN the System SHALL store them in the Database
+6. WHEN an Organizer views an Exchange with fewer than 3 Participants, THEN the System SHALL NOT display the generate assignments button
+7. WHEN an Organizer views an Exchange with fewer than 3 Participants, THEN the System SHALL display a warning message indicating the current participant count and the minimum requirement
 
 ### Requirement 6
 
@@ -88,6 +90,9 @@ The Secret Santa Exchange system is a web application that enables groups of peo
 2. WHEN a Participant views their Assignment before Assignments are generated, THEN the System SHALL display a message indicating assignments are not yet available
 3. WHEN a Participant accesses an Assignment, THEN the System SHALL verify the Participant belongs to that Exchange
 4. WHEN a Participant attempts to view another Participant's Assignment, THEN the System SHALL deny access and display an error message
+5. WHEN an Organizer views an Exchange with generated Assignments, THEN the System SHALL display all Assignment pairings to the Organizer
+6. WHEN an Organizer views all Assignments, THEN the System SHALL order the Assignments by the time each giver joined the Exchange
+7. WHEN an Organizer views all Assignments, THEN the System SHALL display a clear indication that this view is only visible to the Organizer
 
 ### Requirement 7
 
